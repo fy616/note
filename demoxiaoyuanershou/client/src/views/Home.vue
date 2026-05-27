@@ -48,9 +48,11 @@
         <p class="order-desc">{{ order.description }}</p>
 
         <div class="order-tags">
+          <span v-if="order.category" class="order-tag category">🏷️ {{ order.category }}</span>
           <span class="order-tag">📍 {{ order.location }}</span>
           <span v-if="order.reward" class="order-tag reward">🎁 {{ order.reward }} 积分</span>
           <span v-if="order.contact" class="order-tag">📞 {{ order.contact }}</span>
+          <span v-if="order.deadline" class="order-tag deadline">⏰ {{ formatDeadline(order.deadline) }}</span>
         </div>
 
         <div v-if="order.reviewMessage" class="review-banner">
@@ -68,6 +70,10 @@
                     class="btn btn-outline btn-sm" @click="handleComplete(order.id)">
               完成
             </button>
+            <button v-if="order.status === 'taken' && (order.userId === store.userId || order.takerId === store.userId)"
+                    class="btn btn-outline btn-sm chat-btn" @click="chatOrderId = order.id">
+              💬 聊天
+            </button>
             <span v-if="order.status === 'taken' && order.takerId !== store.userId"
                   class="status-hint">🤝 {{ order.takerName }} 已接单</span>
             <span v-if="order.status === 'completed'" class="status-hint done">✅ 已完成</span>
@@ -79,6 +85,13 @@
         </div>
       </div>
     </div>
+
+    <!-- 聊天弹窗 -->
+    <ChatModal
+      v-if="chatOrderId"
+      :order-id="chatOrderId"
+      @close="chatOrderId = null"
+    />
   </div>
 </template>
 
@@ -86,6 +99,7 @@
 import { ref, watch, onMounted } from 'vue'
 import { useUserStore } from '../stores/user'
 import { getOrders, takeOrder, completeOrder, getCategories } from '../api'
+import ChatModal from '../components/ChatModal.vue'
 
 const store = useUserStore()
 const currentTab = ref('all')
@@ -93,6 +107,7 @@ const currentCategory = ref('all')
 const categories = ref([])
 const orders = ref([])
 const loading = ref(true)
+const chatOrderId = ref(null)
 
 async function loadCategories() {
   try {
@@ -137,6 +152,17 @@ function formatTime(iso) {
   if (diff < 3600000) return `${Math.floor(diff / 60000)}分钟前`
   if (diff < 86400000) return `${Math.floor(diff / 3600000)}小时前`
   return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+}
+
+function formatDeadline(deadline) {
+  const d = new Date(deadline)
+  const now = new Date()
+  const diff = d - now
+
+  if (diff < 0) return '已过期'
+  if (diff < 3600000) return `剩余 ${Math.floor(diff / 60000)} 分钟`
+  if (diff < 86400000) return `剩余 ${Math.floor(diff / 3600000)} 小时`
+  return `截止 ${d.getMonth() + 1}/${d.getDate()} ${d.getHours()}:${d.getMinutes().toString().padStart(2, '0')}`
 }
 
 async function handleTake(id) {
@@ -236,6 +262,19 @@ watch([currentTab, currentCategory], loadOrders, { immediate: true })
   background: var(--orange-50);
   color: var(--orange-600);
   border-color: rgba(255,152,0,0.15);
+}
+.order-tag.category {
+  background: var(--blue-50);
+  color: var(--blue-600);
+  border-color: rgba(66,165,245,0.15);
+}
+.order-tag.deadline {
+  background: var(--purple-50, #f3e5f5);
+  color: var(--purple-600, #7b1fa2);
+  border-color: rgba(123,31,162,0.15);
+}
+.chat-btn {
+  margin-left: 4px;
 }
 
 .review-banner {
