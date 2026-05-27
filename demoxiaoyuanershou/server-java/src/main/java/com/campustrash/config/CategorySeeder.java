@@ -2,15 +2,17 @@ package com.campustrash.config;
 
 import com.campustrash.entity.TaskCategory;
 import com.campustrash.repository.TaskCategoryRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class CategorySeeder implements CommandLineRunner {
 
     private final TaskCategoryRepository categoryRepository;
+
+    public CategorySeeder(TaskCategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     @Override
     public void run(String... args) {

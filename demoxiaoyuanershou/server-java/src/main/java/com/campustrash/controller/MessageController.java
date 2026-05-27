@@ -5,7 +5,6 @@ import com.campustrash.entity.Message;
 import com.campustrash.security.JwtUser;
 import com.campustrash.service.MessageService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +14,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/orders/{orderId}/messages")
-@RequiredArgsConstructor
 public class MessageController {
 
     private final MessageService messageService;
+
+    public MessageController(MessageService messageService) {
+        this.messageService = messageService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Message>> getMessages(

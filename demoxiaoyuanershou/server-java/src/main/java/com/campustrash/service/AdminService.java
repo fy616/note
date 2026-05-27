@@ -22,6 +22,14 @@ public class AdminService {
         this.orderRepository = orderRepository;
     }
 
+    public void checkAdmin(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("用户不存在"));
+        if (!"admin".equals(user.getRole())) {
+            throw new RuntimeException("需要管理员权限");
+        }
+    }
+
     public Map<String, Object> getUsers() {
         List<User> users = userRepository.findAllByOrderByCreatedAtDesc();
         return Map.of("users", users);

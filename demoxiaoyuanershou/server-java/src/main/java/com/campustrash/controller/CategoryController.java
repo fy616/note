@@ -6,7 +6,6 @@ import com.campustrash.security.JwtUser;
 import com.campustrash.service.CategoryService;
 import com.campustrash.service.AdminService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +15,15 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/categories")
-@RequiredArgsConstructor
 public class CategoryController {
 
     private final CategoryService categoryService;
     private final AdminService adminService;
+
+    public CategoryController(CategoryService categoryService, AdminService adminService) {
+        this.categoryService = categoryService;
+        this.adminService = adminService;
+    }
 
     @GetMapping
     public ResponseEntity<List<TaskCategory>> getAllCategories() {

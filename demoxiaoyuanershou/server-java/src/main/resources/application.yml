@@ -1,0 +1,22 @@
+server:
+  port: 3000
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/campus_trash?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: fy081215
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+app:
+  jwt:
+    secret: campus-trash-secret-key-2024-spring-boot-app
+    expiration: 604800000

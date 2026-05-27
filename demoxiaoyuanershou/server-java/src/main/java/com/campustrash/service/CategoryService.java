@@ -3,16 +3,18 @@ package com.campustrash.service;
 import com.campustrash.dto.CategoryRequest;
 import com.campustrash.entity.TaskCategory;
 import com.campustrash.repository.TaskCategoryRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class CategoryService {
 
     private final TaskCategoryRepository categoryRepository;
+
+    public CategoryService(TaskCategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     public List<TaskCategory> getAllCategories() {
         return categoryRepository.findAllByOrderBySortOrderAsc();

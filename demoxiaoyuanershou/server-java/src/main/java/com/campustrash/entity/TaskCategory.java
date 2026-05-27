@@ -1,10 +1,8 @@
 package com.campustrash.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import java.time.LocalDateTime;
 
-@Data
 @Entity
 @Table(name = "task_categories")
 public class TaskCategory {
@@ -34,4 +32,19 @@ public class TaskCategory {
         id = String.valueOf(System.currentTimeMillis());
         createdAt = LocalDateTime.now();
     }
+
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getIcon() { return icon; }
+    public void setIcon(String icon) { this.icon = icon; }
+    public Boolean getNeedReview() { return needReview; }
+    public void setNeedReview(Boolean needReview) { this.needReview = needReview; }
+    public Integer getSortOrder() { return sortOrder; }
+    public void setSortOrder(Integer sortOrder) { this.sortOrder = sortOrder; }
+    public Boolean getIsCustom() { return isCustom; }
+    public void setIsCustom(Boolean isCustom) { this.isCustom = isCustom; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

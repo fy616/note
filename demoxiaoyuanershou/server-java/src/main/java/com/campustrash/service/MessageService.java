@@ -7,24 +7,27 @@ import com.campustrash.entity.User;
 import com.campustrash.repository.MessageRepository;
 import com.campustrash.repository.OrderRepository;
 import com.campustrash.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class MessageService {
 
     private final MessageRepository messageRepository;
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
 
+    public MessageService(MessageRepository messageRepository, OrderRepository orderRepository, UserRepository userRepository) {
+        this.messageRepository = messageRepository;
+        this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
+    }
+
     public List<Message> getMessages(String orderId, String userId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("订单不存在"));
 
-        // 只有发布者和接单者可以查看消息
         if (!order.getUserId().equals(userId) && !userId.equals(order.getTakerId())) {
             throw new RuntimeException("无权查看消息");
         }
@@ -36,12 +39,10 @@ public class MessageService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("订单不存在"));
 
-        // 只有发布者和接单者可以发消息
         if (!order.getUserId().equals(userId) && !userId.equals(order.getTakerId())) {
             throw new RuntimeException("无权发送消息");
         }
 
-        // 只有状态为taken时才能发消息
         if (!"taken".equals(order.getStatus())) {
             throw new RuntimeException("订单状态不允许聊天");
         }
