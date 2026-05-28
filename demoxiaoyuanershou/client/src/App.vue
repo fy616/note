@@ -1,37 +1,17 @@
 <template>
   <div class="app">
-    <header v-if="store.isLoggedIn" class="header">
-      <div class="header-inner">
-        <div class="header-left">
-          <router-link to="/" class="logo">
-            <span class="logo-icon">♻</span>
-            <span class="logo-text">校园帮扔</span>
-          </router-link>
-          <nav v-if="store.isAdmin" class="admin-nav">
-            <router-link to="/admin/review" class="nav-link">审核订单</router-link>
-            <router-link to="/admin/users" class="nav-link">用户管理</router-link>
-            <router-link to="/admin/categories" class="nav-link">分类管理</router-link>
-          </nav>
-        </div>
-        <div class="header-right">
-          <router-link to="/create" class="btn btn-primary btn-sm">
-            <span>＋</span> 发布订单
-          </router-link>
-          <router-link to="/my-orders" class="btn btn-outline btn-sm">我的订单</router-link>
-          <div class="user-menu">
-            <span class="username">{{ store.username }}</span>
-            <button @click="handleLogout" class="btn btn-ghost btn-sm">退出</button>
-          </div>
-        </div>
-      </div>
-    </header>
+    <!-- 未登录：保留原 Landing 导航（Landing.vue 自带） -->
+    <!-- 已登录：轮盘导航 -->
+    <CarouselNav
+      v-if="store.isLoggedIn"
+      :items="navItems"
+      :admin-items="adminItems"
+      :is-admin="store.isAdmin"
+      :username="store.username"
+    />
 
     <main class="main">
-      <router-view v-slot="{ Component }">
-        <transition name="page" mode="out-in">
-          <component :is="Component" />
-        </transition>
-      </router-view>
+      <PageTransition />
     </main>
 
     <div v-if="toast.visible" :class="['toast', `toast-${toast.type}`]">
@@ -42,12 +22,27 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch } from 'vue'
+import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from './stores/user'
+import CarouselNav from './components/CarouselNav.vue'
+import PageTransition from './components/PageTransition.vue'
 
 const store = useUserStore()
 const router = useRouter()
+
+// 菜单配置
+const navItems = [
+  { label: '首页', icon: '🏠', path: '/home' },
+  { label: '发布订单', icon: '📝', path: '/create' },
+  { label: '我的订单', icon: '📋', path: '/my-orders' }
+]
+
+const adminItems = [
+  { label: '订单审核', icon: '📋', path: '/admin/review' },
+  { label: '用户管理', icon: '👥', path: '/admin/users' },
+  { label: '分类管理', icon: '📂', path: '/admin/categories' }
+]
 
 const toast = reactive({ visible: false, message: '', type: 'success' })
 let toastTimer = null
@@ -66,12 +61,6 @@ const toastIcon = {
   info: 'ℹ',
   warning: '⚠'
 }[toast.type] || '✓'
-
-function handleLogout() {
-  store.logout()
-  showToast('已退出登录', 'info')
-  setTimeout(() => router.push('/login'), 300)
-}
 
 window.__toast = showToast
 </script>
@@ -129,102 +118,6 @@ body {
 
 .app { min-height: 100vh; }
 
-.header {
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 1px 12px rgba(0,0,0,0.04);
-}
-.header-inner {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 24px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-}
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-}
-.logo-icon {
-  font-size: 28px;
-  line-height: 1;
-}
-.logo-text {
-  font-size: 19px;
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--green-600), var(--green-800));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: 0.5px;
-}
-.admin-nav {
-  display: flex;
-  gap: 4px;
-  padding-left: 20px;
-  border-left: 1.5px solid var(--gray-200);
-}
-.nav-link {
-  font-size: 14px;
-  color: var(--gray-600);
-  text-decoration: none;
-  padding: 7px 14px;
-  border-radius: var(--radius-sm);
-  transition: var(--transition-fast);
-  position: relative;
-}
-.nav-link:hover {
-  background: var(--green-50);
-  color: var(--green-700);
-}
-.nav-link.router-link-active {
-  background: var(--green-50);
-  color: var(--green-700);
-  font-weight: 600;
-}
-.nav-link.router-link-active::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 16px;
-  height: 2px;
-  background: var(--green-600);
-  border-radius: 1px;
-}
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.user-menu {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 10px 5px 14px;
-  background: var(--gray-50);
-  border-radius: 24px;
-  border: 1px solid var(--gray-100);
-}
-.username {
-  font-size: 13px;
-  color: var(--gray-700);
-  font-weight: 500;
-}
 
 .main {
   max-width: 960px;
@@ -458,20 +351,11 @@ body {
   from { opacity: 0; transform: translateX(-50%) translateY(-20px) scale(0.9); }
   to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 }
-.page-enter-active, .page-leave-active {
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-.page-enter-from { opacity: 0; transform: translateY(12px); }
-.page-leave-to { opacity: 0; transform: translateY(-8px); }
+/* 页面过渡已移至 PageTransition.vue 组件内 */
 
 @media (max-width: 640px) {
-  .header-inner { padding: 0 14px; height: 56px; }
-  .header-right .btn-sm { padding: 6px 10px; font-size: 12px; }
   .main { padding: 16px 14px 32px; }
   .card { padding: 16px; }
-  .admin-nav { display: none; }
-  .username { max-width: 60px; overflow: hidden; text-overflow: ellipsis; }
-  .logo-text { font-size: 16px; }
   .tabs { padding: 4px; }
   .tab { padding: 9px 12px; font-size: 13px; }
 }
