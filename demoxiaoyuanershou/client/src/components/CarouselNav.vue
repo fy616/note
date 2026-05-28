@@ -7,21 +7,14 @@
         <span class="carousel-logo-text">校园帮扔</span>
       </router-link>
 
-      <!-- 3D 轮盘场景 -->
+      <!-- 轮盘导航 -->
       <div
         class="carousel-scene"
-        @wheel.prevent="carousel.onWheel"
         @keydown="carousel.onKeydown"
         tabindex="0"
       >
-        <div
-          class="carousel-track"
-          :style="trackStyle"
-          @transitionend="carousel.onTransitionEnd"
-          @touchstart.passive="carousel.onTouchStart"
-          @touchmove.passive="carousel.onTouchMove"
-          @touchend="carousel.onTouchEnd"
-        >
+        <button class="carousel-arrow carousel-arrow-left" @click="carousel.rotatePrev" aria-label="上一个">‹</button>
+        <div class="carousel-track">
           <CarouselItem
             v-for="(item, idx) in allItems"
             :key="item.path || item.label"
@@ -30,7 +23,6 @@
             :angle="getRelativeAngle(idx)"
             :is-active="idx === carousel.activeIndex.value"
             :visible="carousel.isVisible(idx, allItems.length)"
-            :is-dragging="carousel.isDragging.value"
             :radius="radius"
             @select="handleSelect(idx)"
           />
@@ -49,6 +41,7 @@
             @navigate="handleAdminNavigate"
           />
         </div>
+        <button class="carousel-arrow carousel-arrow-right" @click="carousel.rotateNext" aria-label="下一个">›</button>
       </div>
 
       <!-- 用户信息 -->
@@ -123,10 +116,6 @@ const currentPath = computed(() => route.path)
 // 响应式半径
 const isMobile = ref(window.innerWidth < 768)
 const radius = computed(() => isMobile.value ? '80px' : '120px')
-
-const trackStyle = computed(() => ({
-  '--rotation': carousel.rotation.value
-}))
 
 const adminSectorActive = computed(() => {
   return carousel.isExpanded.value ||
@@ -244,10 +233,8 @@ onUnmounted(() => window.removeEventListener('resize', onResize))
   letter-spacing: 0.5px;
 }
 
-/* 3D 场景 */
+/* 轮盘场景 */
 .carousel-scene {
-  perspective: 800px;
-  perspective-origin: center center;
   overflow: visible;
   height: 60px;
   flex: 1;
@@ -258,15 +245,35 @@ onUnmounted(() => window.removeEventListener('resize', onResize))
 }
 
 .carousel-track {
-  transform-style: preserve-3d;
-  transform: rotateY(calc(var(--rotation) * 1deg));
-  transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   width: 0;
   height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.carousel-arrow {
+  background: none;
+  border: 1.5px solid var(--green-300);
+  color: var(--green-600);
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  line-height: 1;
+  padding: 0;
+}
+
+.carousel-arrow:hover {
+  background: var(--green-50);
+  border-color: var(--green-400);
 }
 
 /* 用户信息 */
@@ -380,9 +387,6 @@ onUnmounted(() => window.removeEventListener('resize', onResize))
 
 /* 响应式 */
 @media (max-width: 768px) {
-  .carousel-scene {
-    perspective: 500px;
-  }
   .carousel-logo-text {
     font-size: 16px;
   }
@@ -395,23 +399,6 @@ onUnmounted(() => window.removeEventListener('resize', onResize))
   .carousel-nav-inner {
     padding: 0 14px;
     height: 56px;
-  }
-  .carousel-scene {
-    perspective: 400px;
-  }
-}
-
-/* 降级方案 */
-@supports not (transform-style: preserve-3d) {
-  .carousel-track {
-    transform: none !important;
-    position: relative;
-    width: auto;
-    height: auto;
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
   }
 }
 
