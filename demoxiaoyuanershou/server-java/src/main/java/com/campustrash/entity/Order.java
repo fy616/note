@@ -10,6 +10,7 @@ public class Order {
     @Id
     private String id;
 
+    @Column(name = "userId")
     private String userId;
     private String username;
     private String description;
@@ -18,10 +19,12 @@ public class Order {
     private String contact;
     private String status;
 
+    @Column(name = "takerId")
     private String takerId;
+    @Column(name = "takerName")
     private String takerName;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "reviewMessage", columnDefinition = "TEXT")
     private String reviewMessage;
 
     @Column(length = 50)
@@ -29,6 +32,7 @@ public class Order {
 
     private LocalDateTime deadline;
 
+    @Column(name = "createdAt")
     private LocalDateTime createdAt;
 
     @PrePersist

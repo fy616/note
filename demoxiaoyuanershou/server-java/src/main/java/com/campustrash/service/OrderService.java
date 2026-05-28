@@ -40,7 +40,7 @@ public class OrderService {
         if (!isAdmin) {
             orders = orders.stream()
                     .filter(o -> !List.of("pending_review", "rejected").contains(o.getStatus())
-                            || o.getUserId().equals(userId))
+                            || userId.equals(o.getUserId()))
                     .toList();
         }
 
