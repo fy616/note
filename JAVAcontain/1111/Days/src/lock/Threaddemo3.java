@@ -1,4 +1,4 @@
-package demo_2;
+package lock;
 
 public class Threaddemo3 {
     public static void main(String[] args) {

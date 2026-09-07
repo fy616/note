@@ -121,3 +121,7 @@ export function sendMessage(orderId, content) {
 export function getUnreadCount(orderId) {
   return api.get(`/orders/${orderId}/messages/unread`)
 }
+
+export function getStats() {
+  return api.get('/stats')
+}

@@ -4,6 +4,12 @@ public class Student {
     private String name;
     private int sex;
     private double score;
+    public Student() {
+    }
+
+    public static int Comparable(Student s1, Student s2) {
+            return (int)(s1.score-s2.score);
+    }
 
     public String getName() {
         return name;
@@ -36,4 +42,11 @@ public class Student {
         this.score = score;
     }
 
+    public int Comparable(Student student) {
+              return (int)(this.score-student.score);
+    }
+
+    public int comparescore(Student student, Student student1) {
+            return (int)(student.score-student1.score);
+    }
 }

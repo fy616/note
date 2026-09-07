@@ -3,6 +3,11 @@ import { useUserStore } from '../stores/user'
 
 const routes = [
   {
+    path: '/',
+    name: 'Landing',
+    component: () => import('../views/Landing.vue')
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('../views/Login.vue')
@@ -13,7 +18,7 @@ const routes = [
     component: () => import('../views/Register.vue')
   },
   {
-    path: '/',
+    path: '/home',
     name: 'Home',
     component: () => import('../views/Home.vue'),
     meta: { requiresAuth: true }
@@ -57,10 +62,12 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const store = useUserStore()
-  if (to.meta.requiresAuth && !store.isLoggedIn) {
+  if (to.name === 'Landing' && store.isLoggedIn) {
+    next('/home')
+  } else if (to.meta.requiresAuth && !store.isLoggedIn) {
     next('/login')
   } else if (to.meta.requiresAdmin && !store.isAdmin) {
-    next('/')
+    next('/home')
   } else {
     next()
   }

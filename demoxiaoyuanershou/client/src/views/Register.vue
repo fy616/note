@@ -67,7 +67,7 @@ async function handleRegister() {
   try {
     await store.register({ ...form })
     window.__toast?.('注册成功', 'success')
-    router.push('/')
+    router.push('/home')
   } catch (e) {
     error.value = e.message || '注册失败'
   } finally {

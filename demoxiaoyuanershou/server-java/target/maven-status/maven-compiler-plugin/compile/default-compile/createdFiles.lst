@@ -28,6 +28,7 @@ com\campustrash\dto\RegisterRequest.class
 com\campustrash\controller\AdminController.class
 com\campustrash\security\JwtUser.class
 com\campustrash\controller\AuthController.class
+com\campustrash\controller\StatsController.class
 com\campustrash\controller\MessageController.class
 com\campustrash\dto\MessageRequest.class
 com\campustrash\entity\TaskCategory.class

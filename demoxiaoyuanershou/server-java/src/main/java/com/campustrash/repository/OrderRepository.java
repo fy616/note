@@ -15,4 +15,6 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     List<Order> findByUserId(String userId);
     List<Order> findByTakerId(String takerId);
     void deleteByUserId(String userId);
+
+    long countByStatus(String status);
 }

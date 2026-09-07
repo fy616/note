@@ -1,4 +1,5 @@
 package 内部类.匿名;
 
-public class animal {
+public abstract class animal {
+    public abstract void cry();
 }

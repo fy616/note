@@ -54,7 +54,7 @@ async function handleLogin() {
   try {
     await store.login(username.value, password.value)
     window.__toast?.('登录成功', 'success')
-    router.push('/')
+    router.push('/home')
   } catch (e) {
     error.value = e.message || '登录失败'
   } finally {

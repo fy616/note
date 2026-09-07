@@ -1,4 +1,5 @@
 package duoxiancheng;
 
-public interface Myrunable {
+public interface Myrunable extends Runnable {
+    public void run();
 }

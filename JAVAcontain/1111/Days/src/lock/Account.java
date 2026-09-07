@@ -1,8 +1,13 @@
-package demo_2;
+package lock;
+
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Account{
     private double money;
     private String Card;
+    private final Lock lock=new ReentrantLock();//创建锁对象,并且保护锁对象
+
     //构造方法
     public Account(double money, String card) {
         this.Card = card;
@@ -29,7 +34,8 @@ public class Account{
 
     public  void withdraw(double i) {
         String name = Thread.currentThread().getName();
-        synchronized (this) {//锁对象this
+        lock.lock();
+        try {
             if (i <= money) {
                 money -= i;
                 System.out.println(name + "取钱成功，余额为：" + money);
@@ -37,7 +43,12 @@ public class Account{
             } else {
                 System.out.println(name + "取钱失败，余额不足");
             }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            lock.unlock();//释放锁，用fianly 保证锁一定释放;
         }
+
 
     }
 }

@@ -30,7 +30,6 @@
           <!-- 管理扇区（仅管理员可见） -->
           <SectorGroup
             v-if="isAdmin"
-            :is-expanded="carousel.isExpanded.value"
             :is-active="adminSectorActive"
             :admin-items="adminItems"
             :active-path="currentPath"
@@ -51,27 +50,27 @@
       </div>
     </div>
 
-    <!-- 移动端管理抽屉 -->
+    <!-- 管理菜单下拉 -->
     <Teleport to="body">
       <div
-        v-if="isMobileDrawer"
-        class="mobile-drawer-overlay"
+        v-if="showAdminMenu"
+        class="admin-menu-overlay"
         @click="handleSectorCollapse"
       >
-        <div class="mobile-drawer" @click.stop>
-          <div class="mobile-drawer-header">
+        <div class="admin-menu" @click.stop>
+          <div class="admin-menu-header">
             <span>管理菜单</span>
-            <button class="mobile-drawer-close" @click="handleSectorCollapse">✕</button>
+            <button class="admin-menu-close" @click="handleSectorCollapse">✕</button>
           </div>
-          <div class="mobile-drawer-items">
+          <div class="admin-menu-items">
             <div
               v-for="item in adminItems"
               :key="item.path"
-              class="mobile-drawer-item"
+              class="admin-menu-item"
               :class="{ active: currentPath === item.path }"
               @click="handleAdminNavigate(item.path)"
             >
-              <span>{{ item.icon }}</span>
+              <span class="admin-menu-item-icon">{{ item.icon }}</span>
               <span>{{ item.label }}</span>
             </div>
           </div>
@@ -118,7 +117,7 @@ const isMobile = ref(window.innerWidth < 768)
 const radius = computed(() => isMobile.value ? '80px' : '120px')
 
 const adminSectorActive = computed(() => {
-  return carousel.isExpanded.value ||
+  return showAdminMenu.value ||
     ['/admin/review', '/admin/users', '/admin/categories'].includes(route.path)
 })
 
@@ -128,15 +127,13 @@ const getRelativeAngle = (index) => {
   return diff * (360 / allItems.value.length)
 }
 
-// 事件处理
+// 管理菜单显示
+const showAdminMenu = ref(false)
+
 const handleSelect = (idx) => {
   const item = allItems.value[idx]
   if (item.isSector) {
-    if (isMobile.value) {
-      isMobileDrawer.value = true
-    } else {
-      carousel.isExpanded.value = true
-    }
+    showAdminMenu.value = true
     return
   }
   carousel.navigateTo(idx, router)
@@ -148,21 +145,18 @@ const goHome = () => {
 }
 
 const handleSectorExpand = () => {
-  if (isMobile.value) {
-    isMobileDrawer.value = true
-  } else {
-    carousel.isExpanded.value = true
-  }
+  showAdminMenu.value = true
+  carousel.isExpanded.value = true
 }
 
 const handleSectorCollapse = () => {
+  showAdminMenu.value = false
   carousel.isExpanded.value = false
-  isMobileDrawer.value = false
 }
 
 const handleAdminNavigate = (path) => {
+  showAdminMenu.value = false
   carousel.isExpanded.value = false
-  isMobileDrawer.value = false
   router.push(path)
 }
 
@@ -171,9 +165,6 @@ const handleLogout = () => {
   window.__toast?.('已退出登录', 'info')
   setTimeout(() => router.push('/'), 300)
 }
-
-// 移动端抽屉
-const isMobileDrawer = ref(false)
 
 // 路由同步
 watch(() => route.path, (path) => {
@@ -310,69 +301,91 @@ onUnmounted(() => window.removeEventListener('resize', onResize))
   background: var(--red-50);
 }
 
-/* 移动端抽屉 */
-.mobile-drawer-overlay {
+/* 管理菜单弹窗 */
+.admin-menu-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
   z-index: 200;
   animation: fadeIn 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.mobile-drawer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+.admin-menu {
   background: #fff;
-  border-radius: 20px 20px 0 0;
-  padding: 20px;
-  transform: translateY(0);
-  animation: drawerSlideUp 0.3s ease-out;
-  z-index: 201;
+  border-radius: 20px;
+  padding: 24px;
+  min-width: 280px;
+  max-width: 90vw;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.mobile-drawer-header {
+.admin-menu-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--gray-800);
 }
 
-.mobile-drawer-close {
+.admin-menu-close {
   background: none;
   border: none;
-  font-size: 18px;
-  color: var(--gray-500);
+  font-size: 20px;
+  color: var(--gray-400);
   cursor: pointer;
   padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.15s ease;
 }
 
-.mobile-drawer-items {
+.admin-menu-close:hover {
+  background: var(--gray-100);
+  color: var(--gray-600);
+}
+
+.admin-menu-items {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
-.mobile-drawer-item {
+.admin-menu-item {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
   border-radius: 12px;
   font-size: 15px;
+  font-weight: 500;
   color: var(--gray-700);
   cursor: pointer;
   transition: all 0.15s ease;
+  border: none;
+  background: none;
+  text-align: left;
+  font-family: inherit;
 }
 
-.mobile-drawer-item:hover,
-.mobile-drawer-item.active {
+.admin-menu-item:hover {
   background: var(--blue-50);
   color: #1565c0;
+}
+
+.admin-menu-item.active {
+  background: var(--blue-50);
+  color: #1565c0;
+  font-weight: 600;
+}
+
+.admin-menu-item-icon {
+  font-size: 18px;
+  line-height: 1;
 }
 
 @keyframes fadeIn {
@@ -380,9 +393,9 @@ onUnmounted(() => window.removeEventListener('resize', onResize))
   to { opacity: 1; }
 }
 
-@keyframes drawerSlideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 /* 响应式 */
@@ -407,10 +420,10 @@ onUnmounted(() => window.removeEventListener('resize', onResize))
   .carousel-track {
     transition: none;
   }
-  .mobile-drawer {
+  .admin-menu {
     animation: none;
   }
-  .mobile-drawer-overlay {
+  .admin-menu-overlay {
     animation: none;
   }
 }

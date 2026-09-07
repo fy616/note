@@ -23,6 +23,7 @@ D:\demoxiaoyuanershou\server-java\src\main\java\com\campustrash\repository\Order
 D:\demoxiaoyuanershou\server-java\src\main\java\com\campustrash\dto\RejectRequest.java
 D:\demoxiaoyuanershou\server-java\src\main\java\com\campustrash\dto\CategoryRequest.java
 D:\demoxiaoyuanershou\server-java\src\main\java\com\campustrash\service\AuthService.java
+D:\demoxiaoyuanershou\server-java\src\main\java\com\campustrash\controller\StatsController.java
 D:\demoxiaoyuanershou\server-java\src\main\java\com\campustrash\common\GlobalExceptionHandler.java
 D:\demoxiaoyuanershou\server-java\src\main\java\com\campustrash\controller\AuthController.java
 D:\demoxiaoyuanershou\server-java\src\main\java\com\campustrash\controller\CategoryController.java

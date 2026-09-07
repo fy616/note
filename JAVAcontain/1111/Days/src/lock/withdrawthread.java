@@ -1,4 +1,4 @@
-package demo_2;
+package lock;
 
 public class withdrawthread extends Thread {
     private Account account;
