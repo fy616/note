@@ -1,0 +1,44 @@
+/* Version B: Linear-inspired near-black */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-card: #0f1011;
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #62666d;
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-soft: #1a1b1d;
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --on-primary: #ffffff;
+  --success: #27a644;
+}
+
+body.theme-b { background: var(--canvas); color: var(--ink); font-family: 'Inter', system-ui, sans-serif; }
+.theme-b .header-bar { background: rgba(1, 1, 2, 0.85); border-bottom: 1px solid var(--hairline); backdrop-filter: blur(12px); }
+.theme-b .entry-card { background: var(--surface-card); border: 1px solid var(--hairline); border-radius: 8px; }
+.theme-b .entry-card h1 { font-family: 'Inter'; font-weight: 500; letter-spacing: -1.2px; }
+.theme-b .entry-prose { font-family: 'Inter'; color: var(--ink-muted); line-height: 1.7; }
+.theme-b .accent { color: var(--primary); }
+.theme-b .bg-muted-cell { background: var(--surface-2); }
+.theme-b .text-muted { color: var(--ink-subtle); }
+.theme-b .text-mono { font-family: 'JetBrains Mono', monospace; }
+.theme-b .date-tag { color: var(--primary); font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+.theme-b .icon-btn:hover { background: var(--surface-2); }
+.theme-b .search-input { background: var(--surface-2); color: var(--ink); border: 1px solid var(--hairline); }
+.theme-b .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(94, 106, 210, 0.3); }
+.theme-b .entry-card code { font-family: 'JetBrains Mono', monospace; background: var(--surface-2); color: var(--ink); padding: 1px 6px; border-radius: 4px; }
+.theme-b .entry-card pre { font-family: 'JetBrains Mono', monospace; background: var(--surface-2); color: var(--ink); padding: 16px; border-radius: 6px; }
+.theme-b .entry-card blockquote { border-left: 3px solid var(--primary); padding-left: 16px; color: var(--ink-subtle); }
+.theme-b .entry-card a { color: var(--primary); }
+.theme-b .version-tag { background: var(--primary); color: var(--on-primary); }
+.theme-b .footer-text { color: var(--ink-tertiary); }
+.theme-b .entry-card h1, .theme-b .entry-card h2, .theme-b .entry-card h3 { color: var(--ink); }
+.theme-b .header-title { color: var(--ink); }
+.theme-b .header-sub { color: var(--ink-subtle); }

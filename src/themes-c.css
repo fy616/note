@@ -1,0 +1,42 @@
+/* Version C: Claude-inspired cream + coral serif */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+:root {
+  --canvas: #faf9f5;
+  --canvas-soft: #f5f0e8;
+  --surface-card: #efe9de;
+  --surface-soft: #f5f0e8;
+  --ink: #141413;
+  --body: #3d3d3a;
+  --body-strong: #252523;
+  --muted: #6c6a64;
+  --muted-soft: #8e8b82;
+  --hairline: #e6dfd8;
+  --hairline-soft: #ebe6df;
+  --primary: #cc785c;
+  --primary-active: #a9583e;
+  --on-primary: #ffffff;
+  --accent-teal: #5db8a6;
+}
+
+body.theme-c { background: var(--canvas); color: var(--ink); font-family: 'Lora', Georgia, serif; }
+.theme-c .header-bar { background: rgba(250, 249, 245, 0.9); border-bottom: 1px solid var(--hairline); }
+.theme-c .entry-card { background: var(--surface-card); border: 1px solid var(--hairline); border-radius: 4px; }
+.theme-c .entry-card h1 { font-family: 'Cormorant Garamond', serif; font-weight: 500; letter-spacing: -0.5px; }
+.theme-c .entry-prose { font-family: 'Lora', Georgia, serif; color: var(--body-strong); line-height: 1.75; }
+.theme-c .accent { color: var(--primary); }
+.theme-c .bg-muted-cell { background: var(--surface-soft); }
+.theme-c .text-muted { color: var(--muted); }
+.theme-c .text-mono { font-family: 'JetBrains Mono', monospace; }
+.theme-c .date-tag { color: var(--primary); font-family: 'Lora', serif; font-size: 12px; font-weight: 500; font-style: italic; letter-spacing: 0.5px; }
+.theme-c .icon-btn:hover { background: var(--surface-soft); }
+.theme-c .search-input { background: var(--surface-soft); border: 1px solid var(--hairline); }
+.theme-c .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(204, 120, 92, 0.2); }
+.theme-c .entry-card code { font-family: 'JetBrains Mono', monospace; background: var(--canvas); padding: 1px 6px; border-radius: 3px; }
+.theme-c .entry-card pre { font-family: 'JetBrains Mono', monospace; background: var(--canvas); padding: 16px; border-radius: 4px; }
+.theme-c .entry-card blockquote { border-left: 3px solid var(--primary); padding-left: 16px; color: var(--muted); font-style: italic; }
+.theme-c .entry-card a { color: var(--primary); text-decoration: underline; }
+.theme-c .version-tag { background: var(--primary); color: var(--on-primary); }
+.theme-c .footer-text { color: var(--muted); }
+.theme-c .header-title { font-family: 'Cormorant Garamond', serif; font-weight: 500; }
+.theme-c .header-sub { font-family: 'Lora', serif; font-style: italic; color: var(--muted); }
