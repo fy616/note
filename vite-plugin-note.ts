@@ -3,7 +3,7 @@ import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const __dirname = import.meta.dirname;
-const NOTES_DIR = resolve(__dirname, '..', 'notes');
+const NOTES_DIR = resolve(__dirname, 'notes');
 
 interface ModuleInfo {
   slug: string;
