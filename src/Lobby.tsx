@@ -64,7 +64,7 @@ export default function Lobby() {
 
   const load = async () => {
     try {
-      const res = await fetch('/api/modules', { cache: 'no-store' });
+      const res = await fetch('/api/modules.json', { cache: 'no-store' });
       const data = await res.json();
       const list: ModuleInfo[] = data.modules || [];
       setModules(list);

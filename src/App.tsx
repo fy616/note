@@ -26,7 +26,7 @@ export default function App({ moduleSlug, subSlug }: { moduleSlug: string; subSl
 
   const load = useCallback(async () => {
     try {
-      const res = await fetch(`/api/notes?module=${encodeURIComponent(moduleSlug)}`, { cache: 'no-store' });
+      const res = await fetch(`/api/notes/${encodeURIComponent(moduleSlug)}.json`, { cache: 'no-store' });
       if (!res.ok) {
         if (res.status === 404) {
           setContent('');

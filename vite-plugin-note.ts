@@ -162,7 +162,7 @@ export function noteFilePlugin(): Plugin {
   return {
     name: 'noteflow-note-file',
     configureServer(server) {
-      server.middlewares.use('/api/modules', (_req, res) => {
+      server.middlewares.use('/api/modules.json', (_req, res) => {
         try {
           sendJson(res, { modules: listModules() });
         } catch (err) {
@@ -171,15 +171,18 @@ export function noteFilePlugin(): Plugin {
         }
       });
 
-      // GET /api/notes?module=<slug> → full content
-      // Optional: &sub=<subSlug> → could be used client-side after parsing
       server.middlewares.use('/api/notes', (req, res) => {
         try {
           const url = new URL(req.url || '/', 'http://localhost');
-          const moduleSlug = url.searchParams.get('module');
+          const pathname = url.pathname;
+          // Support both /api/notes/<slug>.json and /api/notes?module=<slug>
+          const jsonMatch = pathname.match(/^\/api\/notes\/(.+)\.json$/);
+          const moduleSlug = jsonMatch
+            ? jsonMatch[1]
+            : url.searchParams.get('module');
           if (!moduleSlug) {
             res.statusCode = 400;
-            return sendJson(res, { error: 'module query param required' });
+            return sendJson(res, { error: 'module param required' });
           }
           const filePath = resolve(NOTES_DIR, `${moduleSlug}.md`);
           if (!existsSync(filePath)) {
@@ -194,6 +197,26 @@ export function noteFilePlugin(): Plugin {
           sendJson(res, { error: String(err) });
         }
       });
+    },
+
+    generateBundle() {
+      const modules = listModules();
+      this.emitFile({
+        type: 'asset',
+        fileName: 'api/modules.json',
+        source: JSON.stringify({ modules }),
+      });
+
+      for (const m of modules) {
+        const filePath = resolve(NOTES_DIR, `${m.slug}.md`);
+        const content = readFileUtf8(filePath);
+        const { totalCount, subModules } = readEntriesFromRaw(content);
+        this.emitFile({
+          type: 'asset',
+          fileName: `api/notes/${m.slug}.json`,
+          source: JSON.stringify({ content, module: m.slug, totalCount, subModules }),
+        });
+      }
     },
   };
 }
