@@ -1,5 +1,7 @@
 # NoteFlow · 个人笔记
 
+> 🌐 **线上地址**：https://note-dfk.pages.dev
+
 一个**本地优先**的个人笔记网站。把想记录的内容发给 ZCode，我会自动追加到本地 markdown 文件，浏览器打开就能看到。
 
 ## ✨ 特性
