@@ -173,7 +173,8 @@ export function noteFilePlugin(): Plugin {
 
       server.middlewares.use('/api/notes', (req, res) => {
         try {
-          const url = new URL(req.url || '/', 'http://localhost');
+          // Connect strips the mount prefix from req.url; originalUrl keeps the full path
+          const url = new URL((req as any).originalUrl || req.url || '/', 'http://localhost');
           const pathname = url.pathname;
           // Support both /api/notes/<slug>.json and /api/notes?module=<slug>
           const jsonMatch = pathname.match(/^\/api\/notes\/(.+)\.json$/);
